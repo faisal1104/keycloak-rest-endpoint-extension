@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id "com.diffplug.spotless" version "5.3.0"
+}
+
+group 'com.unipet.bespoke.keycloak'
+version = '0.0.1-SNAPSHOT'
+
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withJavadocJar()
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.keycloak:keycloak-server-spi:$keycloakVersion"
+    implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
+    implementation "org.keycloak:keycloak-core:$keycloakVersion"
+    implementation "org.keycloak:keycloak-services:$keycloakVersion"
+    implementation "org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:$jboss_jaxrs_api_2_1_spec"
+    implementation "org.projectlombok:lombok:$lombokVersion"
+    implementation "commons-collections:commons-collections:3.2.2"
+
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+spotless.java {
+    eclipse()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach { task ->
+    {
+        task.dependsOn "spotlessApply"
+    }
+}
